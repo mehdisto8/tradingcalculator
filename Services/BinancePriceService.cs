@@ -29,10 +29,10 @@ public class BinancePriceService : IPriceService
         }
         catch
         {
-            // اگر ردیس مشکل داشت → مهم نیست
+        
         }
 
-        // برو Binance
+        
         var url = $"https://api.binance.com/api/v3/ticker/price?symbol={symbol}";
         var json = await _http.GetStringAsync(url);
 
@@ -52,7 +52,7 @@ public class BinancePriceService : IPriceService
         }
         catch
         {
-            // ذخیره نشد هم مهم نیست
+        
         }
 
         return decimal.Parse(priceString);
