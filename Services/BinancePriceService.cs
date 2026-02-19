@@ -1,7 +1,7 @@
 ﻿using StackExchange.Redis;
 using System.Text.Json;
 
-namespace TradingCalculator1.Services;
+namespace TradingCalculator.Services;
 
 public class BinancePriceService : IPriceService
 {

@@ -1,4 +1,4 @@
-﻿namespace TradingCalculator1.Services;
+﻿namespace TradingCalculator.Services;
 
 public interface IPriceService
 {

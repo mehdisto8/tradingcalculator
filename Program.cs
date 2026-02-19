@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using StackExchange.Redis;
-using TradingCalculator1.Models;
-using TradingCalculator1.Services;
+using TradingCalculator.Models;
+using TradingCalculator.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,7 +19,7 @@ builder.Services.AddScoped<ISymbolService, SymbolService>();
 builder.Services.AddDbContext<TradingDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-var app = builder.Build();
+WebApplication? app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {

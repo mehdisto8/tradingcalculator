@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using TradingCalculator1.Models;
-using TradingCalculator1.Services;
+using TradingCalculator.Models;
+using TradingCalculator.Services;
 
-namespace TradingCalculator1.Controllers;
+namespace TradingCalculator.Controllers;
 
 [ApiController]
 [Route("api/symbols")]

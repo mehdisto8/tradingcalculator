@@ -1,6 +1,6 @@
-﻿using TradingCalculator1.Models;
+﻿using TradingCalculator.Models;
 
-namespace TradingCalculator1.Services;
+namespace TradingCalculator.Services;
 
 public class SymbolService : ISymbolService
 {

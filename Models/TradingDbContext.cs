@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace TradingCalculator1.Models;
+namespace TradingCalculator.Models;
 
 public class TradingDbContext : DbContext
 {
