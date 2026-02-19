@@ -1,32 +1,26 @@
-﻿using StackExchange.Redis;
+﻿using Microsoft.EntityFrameworkCore;
+using StackExchange.Redis;
+using TradingCalculator1.Models;
 using TradingCalculator1.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Controllers
 builder.Services.AddControllers();
-
-// Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddSingleton<IConnectionMultiplexer>(
+    ConnectionMultiplexer.Connect("localhost:6379,abortConnect=false"));
 
-// Redis (retry + crash نکن)
-builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
-{
-    var configuration = "localhost:6379,abortConnect=false";
-    return ConnectionMultiplexer.Connect(configuration);
-});
-
-
-// Price Service
 builder.Services.AddHttpClient<IPriceService, BinancePriceService>();
 
+builder.Services.AddScoped<ISymbolService, SymbolService>();
+
+builder.Services.AddDbContext<TradingDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 var app = builder.Build();
 
-
-// Swagger UI
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -35,7 +29,5 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseAuthorization();
-
 app.MapControllers();
-
 app.Run();

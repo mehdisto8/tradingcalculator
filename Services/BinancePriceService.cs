@@ -6,54 +6,33 @@ namespace TradingCalculator1.Services;
 public class BinancePriceService : IPriceService
 {
     private readonly HttpClient _http;
-    private readonly IConnectionMultiplexer _mux;
+    private readonly IConnectionMultiplexer _redis;
 
-    public BinancePriceService(HttpClient http, IConnectionMultiplexer mux)
+    public BinancePriceService(HttpClient http, IConnectionMultiplexer redis)
     {
         _http = http;
-        _mux = mux;
+        _redis = redis;
     }
 
     public async Task<decimal> GetPriceAsync(string symbol)
     {
-        var key = $"price:{symbol}";
-        IDatabase? redis = null;
+        var db = _redis.GetDatabase();
+        var cacheKey = $"price:{symbol}";
 
-        try
-        {
-            redis = _mux.GetDatabase();
+        var cached = await db.StringGetAsync(cacheKey);
+        if (cached.HasValue)
+            return decimal.Parse(cached!);
 
-            var cached = await redis.StringGetAsync(key);
-            if (cached.HasValue)
-                return decimal.Parse(cached!);
-        }
-        catch
-        {
-        
-        }
-
-        
         var url = $"https://api.binance.com/api/v3/ticker/price?symbol={symbol}";
         var json = await _http.GetStringAsync(url);
 
         using var doc = JsonDocument.Parse(json);
-
-        var priceString = doc.RootElement
-            .GetProperty("price")
-            .GetString();
+        var priceString = doc.RootElement.GetProperty("price").GetString();
 
         if (string.IsNullOrEmpty(priceString))
             throw new Exception("Price not found");
 
-        try
-        {
-            if (redis != null)
-                await redis.StringSetAsync(key, priceString, TimeSpan.FromSeconds(5));
-        }
-        catch
-        {
-        
-        }
+        await db.StringSetAsync(cacheKey, priceString, TimeSpan.FromSeconds(5));
 
         return decimal.Parse(priceString);
     }
