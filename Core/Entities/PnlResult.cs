@@ -1,4 +1,4 @@
-﻿namespace TradingCalculator.Models;
+﻿namespace TradingCalculator.Core.Entities;
 
 public class PnlResult
 {

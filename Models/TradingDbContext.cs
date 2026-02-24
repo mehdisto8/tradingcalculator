@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using TradingCalculator.Core.Entities;
 
 namespace TradingCalculator.Models;
 

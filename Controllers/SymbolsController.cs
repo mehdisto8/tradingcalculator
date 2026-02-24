@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using TradingCalculator.Application.UseCases;
+using TradingCalculator.Core.Entities;
 using TradingCalculator.Models;
-using TradingCalculator.Services;
 
 namespace TradingCalculator.Controllers;
 
@@ -8,17 +9,17 @@ namespace TradingCalculator.Controllers;
 [Route("api/symbols")]
 public class SymbolsController : ControllerBase
 {
-    private readonly ISymbolService _symbolService;
+    private readonly ImportSymbolsUseCase _useCase;
 
-    public SymbolsController(ISymbolService symbolService)
+    public SymbolsController(ImportSymbolsUseCase useCase)
     {
-        _symbolService = symbolService;
+        _useCase = useCase;
     }
 
     [HttpPost("import")]
     public async Task<IActionResult> Import(CurrencyApiResponse response)
     {
-        await _symbolService.SaveCurrenciesAsync(response);
+        await _useCase.Execute(response);
         return Ok("Currencies saved successfully.");
     }
 }
