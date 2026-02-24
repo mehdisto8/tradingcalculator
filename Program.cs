@@ -42,10 +42,11 @@ app.UseExceptionHandler(appError =>
         context.Response.ContentType = "application/json";
 
         await context.Response.WriteAsync(
-            "{\"error\":\"Something went wrong\"}"
-        );
+            "{\"error\":\"Something went wrong\"}");
     });
 });
+
 app.UseAuthorization();
 app.MapControllers();
+
 app.Run();
