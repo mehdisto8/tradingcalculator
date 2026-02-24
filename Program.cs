@@ -31,11 +31,9 @@ builder.Services.AddDbContext<TradingDbContext>(options =>
 
 WebApplication? app = builder.Build();
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.UseSwagger();
+app.UseSwaggerUI();
+
 app.UseExceptionHandler(appError =>
 {
     appError.Run(async context =>
