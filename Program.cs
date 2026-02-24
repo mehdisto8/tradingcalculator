@@ -8,9 +8,11 @@ using TradingCalculator.Application.UseCases;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
 
 builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
 {
@@ -19,34 +21,29 @@ builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
     );
 });
 
+
 builder.Services.AddHttpClient<IPriceProvider, BinancePriceProvider>();
 
 builder.Services.AddScoped<ISymbolRepository, SymbolRepository>();
-
 builder.Services.AddScoped<ImportSymbolsUseCase>();
 builder.Services.AddScoped<CalculatePnLUseCase>();
 
+
 builder.Services.AddDbContext<TradingDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("DefaultConnection")
+    )
+);
 
-WebApplication? app = builder.Build();
+var app = builder.Build();
 
+
+// Swagger (روی Railway هم فعال)
 app.UseSwagger();
 app.UseSwaggerUI();
 
-app.UseExceptionHandler(appError =>
-{
-    appError.Run(async context =>
-    {
-        context.Response.StatusCode = 400;
-        context.Response.ContentType = "application/json";
-
-        await context.Response.WriteAsync(
-            "{\"error\":\"Something went wrong\"}");
-    });
-});
-
 app.UseAuthorization();
+
 app.MapControllers();
 
 app.Run();
