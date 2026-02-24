@@ -46,7 +46,6 @@ app.UseExceptionHandler(appError =>
         );
     });
 });
-app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
 app.Run();
