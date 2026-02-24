@@ -8,11 +8,9 @@ using TradingCalculator.Application.UseCases;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
 
 builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
 {
@@ -21,13 +19,11 @@ builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
     );
 });
 
-
 builder.Services.AddHttpClient<IPriceProvider, BinancePriceProvider>();
 
 builder.Services.AddScoped<ISymbolRepository, SymbolRepository>();
 builder.Services.AddScoped<ImportSymbolsUseCase>();
 builder.Services.AddScoped<CalculatePnLUseCase>();
-
 
 builder.Services.AddDbContext<TradingDbContext>(options =>
     options.UseSqlServer(
@@ -37,8 +33,6 @@ builder.Services.AddDbContext<TradingDbContext>(options =>
 
 var app = builder.Build();
 
-
-// Swagger (روی Railway هم فعال)
 app.UseSwagger();
 app.UseSwaggerUI();
 
